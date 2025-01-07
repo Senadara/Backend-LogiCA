@@ -11,25 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('maintenances', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->enum('role', ['admin', 'driver', 'mechanic']);
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->string('profile')->nullable();
-            $table->rememberToken()->nullable();
+            $table->foreignId('vehicle_id')->constrained('vehicles')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('status')->default('pending');
+            $table->string('evidence_photo')->nullable();
             $table->timestamps();
         });
     }
-    
-
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('maintenances');
     }
 };
