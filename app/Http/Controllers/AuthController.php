@@ -53,7 +53,7 @@ class AuthController extends Controller
 
         $vehicle = Vehicle::where("id", $user->vehicle_id)->first();
 
-        return response()->json(['user' => $user, 'vehicle' => $vehicle]);
+        return response()->json(['user' => $user, 'vehicle' => $vehicle,]);
     }
 
 
