@@ -40,10 +40,16 @@ class VehicleController extends Controller
             'status' => 'nullable|in:available,maintenance,unavailable',
             'last_maintenance_date' => 'nullable|date',
         ]);
+
+        if($validated['last_maintenance_date'] == null){
+            $validated['last_maintenance_date'] = $vehicle->last_maintenance_date;
+        }
     
         $vehicle->update($validated);
         return response()->json($vehicle, 200);
     }
+
+    
     
 
     public function destroy($id)

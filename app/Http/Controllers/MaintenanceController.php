@@ -18,7 +18,6 @@ class MaintenanceController extends Controller
         $validated = $request->validate([
             'vehicle_id' => 'required|exists:vehicles,id',
             'user_id' => 'required|exists:users,id',
-            'status' => 'required|in:pending',
             'evidence_photo' => 'nullable|image|max:2048',
         ]);
     
@@ -36,35 +35,41 @@ class MaintenanceController extends Controller
     
     public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'status' => 'required|in:completed,need_repair',
-            'evidence_photo' => 'nullable|image|max:2048',
-        ]);
-    
-        $maintenance = Maintenance::findOrFail($id);
-    
-        if ($request->hasFile('evidence_photo')) {
-            $path = $request->file('evidence_photo')->store('evidence_photos', 'public');
-            $maintenance->evidence_photo = $path;
-        }
-    
-        if ($validated['status'] === 'need_repair') {
-            $maintenance->status = 'need_repair';
-            Vehicle::find($maintenance->vehicle_id)->update([
-                'status' => 'unavailable',
-            ]);
-        } else {
-            $maintenance->status = 'completed';
-            Vehicle::find($maintenance->vehicle_id)->update([
-                'status' => 'available',
-                'last_maintenance_date' => now(),
-            ]);
-        }
-    
-        $maintenance->save();
-    
-        return response()->json($maintenance, 200);
+
+    $validated = $request->validate([
+        'status' => 'nullable|in:Completed,Need Repair',
+        'mechanic_id' => 'required|exists:mechanics,id',
+        'evidence_photo' => 'nullable|image|max:2048',
+    ]);
+ 
+    $maintenance = Maintenance::findOrFail($id);
+
+    if ($request->hasFile('evidence_photo')) {
+        $path = $request->file('evidence_photo')->store('evidence_photos', 'public');
+        $maintenance->evidence_photo = $path;
     }
+
+    $maintenance->mechanic_id = $validated['mechanic_id'];
+    $maintenance->status = 'On Going';
+
+    if ($validated['status'] === 'Need Repair') {
+        $maintenance->status = 'Need Repair';
+        Vehicle::find($maintenance->vehicle_id)->update([
+            'status' => 'unavailable',
+        ]);
+    } elseif ($validated['status'] === 'Completed') {
+        $maintenance->status = 'Completed';
+        Vehicle::find($maintenance->vehicle_id)->update([
+            'status' => 'available',
+            'last_maintenance_date' => now(),
+        ]);
+    }
+
+    $maintenance->save();
+
+    return response()->json($maintenance, 200);
+}
+
     
 
     public function show($id)
