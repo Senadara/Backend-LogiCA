@@ -19,10 +19,13 @@ use App\Http\Controllers\AuthController;
 
 
 
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/registerapi', [AuthController::class, 'registerapi']);
+Route::post('/loginapi', [AuthController::class, 'loginapi']);
+
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
     Route::resource('vehicles', VehicleController::class);
     Route::resource('maintenance', MaintenanceController::class);
     Route::post('/logout', [AuthController::class, 'logout']);

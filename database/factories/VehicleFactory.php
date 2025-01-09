@@ -12,7 +12,7 @@ class VehicleFactory extends Factory
     public function definition()
     {
         return [
-            'licences_plate' => $this->faker->word() . ' ' . $this->faker->randomNumber(3),
+            'license_plate' => $this->faker->word() . ' ' . $this->faker->randomNumber(3),
             'status' => 'available',
             'last_maintenance_date' => now()->subDays(rand(1, 100)),
         ];

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('vehicles', function (Blueprint $table) {
             $table->id();
-            $table->string('licences_plate');
+            $table->string('license_plate');
             $table->enum('status', ['available', 'maintenance', 'unavailable']);
             $table->date('last_maintenance_date')->nullable();
             $table->timestamps();

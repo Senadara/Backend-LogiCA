@@ -29,10 +29,49 @@ class AuthController extends Controller
             'role' => $request->role,
         ]);
 
+        $user->password = $request->password;
         return response()->json(['user' => $user], 201);
     }
 
     public function login(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json(['error' => 'Invalid credentials'], 401);
+        }
+
+        return response()->json(['user' => $user]);
+    }
+    public function registerapi(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|string|min:6|confirmed',
+            'role' => 'required|string|in:admin,driver,mechanic,api'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => $request->role,
+        ]);
+
+        return response()->json(['user' => $user], 201);
+    }
+
+    public function loginapi(Request $request)
     {
         $request->validate([
             'email' => 'required|email',

@@ -25,9 +25,10 @@ class VehicleController extends Controller
     }
     
 
-    public function show($id)
+    public function show($license_plate)
     {
-        return Vehicle::where('license_plate', $id)->firstOrFail(); // Cari berdasarkan plat nomor
+        $vehicle = Vehicle::where('license_plate', $license_plate)->firstOrFail();
+        return response()->json($vehicle, 200);
     }
     
     public function update(Request $request, $id)
