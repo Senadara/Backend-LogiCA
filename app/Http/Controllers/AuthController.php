@@ -68,7 +68,7 @@ class AuthController extends Controller
             'role' => $request->role,
         ]);
 
-        return response()->json(['user' => $user], 201);
+        return response()->json(['user' => $user], 200);
     }
 
     public function loginapi(Request $request)
