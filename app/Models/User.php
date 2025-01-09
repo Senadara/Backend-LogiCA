@@ -16,6 +16,7 @@ class User extends Authenticatable
         'role',
         'email',
         'password',
+        'vehicle_id',
         'profile',
     ];
 
@@ -26,5 +27,10 @@ class User extends Authenticatable
     public function maintenances()
     {
         return $this->hasMany(Maintenance::class);
+    }
+
+    public function vehicle()
+    {
+        return $this->hasOne(Vehicle::class);
     }
 }

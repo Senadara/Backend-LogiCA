@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('maintenances', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('vehicle_id')->constrained('vehicles')->onDelete('cascade');
+            // $table->foreignId('vehicle_id')->constrained('vehicles')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('mechanic_id')->nullable()->constrained('mechanics')->onDelete('cascade');
             $table->string('status')->default('pending');
             $table->string('evidence_photo')->nullable();
+            $table->string('tipe_maintenance')->nullable();
+            $table->date('date')->nullable();
+            $table->string('note')->nullable();
             $table->timestamps();
         });
     }

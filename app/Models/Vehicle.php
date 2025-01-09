@@ -15,9 +15,5 @@ class Vehicle extends Model
         'last_maintenance_date',
     ];
 
-    public function maintenances()
-    {
-        return $this->hasMany(Maintenance::class);
-    }
 }
 

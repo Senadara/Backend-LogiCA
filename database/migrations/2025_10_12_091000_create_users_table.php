@@ -17,6 +17,7 @@ return new class extends Migration
             $table->enum('role', ['admin', 'driver', 'mechanic', 'api']);
             $table->string('email')->unique();
             $table->string('password');
+            $table->foreignId('vehicle_id')->nullable()->constrained('vehicles')->onDelete('cascade');
             $table->string('profile')->nullable();
             $table->rememberToken()->nullable();
             $table->timestamps();

@@ -17,6 +17,7 @@ class UserFactory extends Factory
             'email' => $this->faker->unique()->safeEmail(),
             'password' => Hash::make('password'),  // Default password: "password"
             'role' => $this->faker->randomElement(['admin', 'driver', 'mechanic']),
+            'vehicle_id' => null,
             'profile' => $this->faker->name(),
         ];
     }
