@@ -15,23 +15,27 @@ class MaintenanceController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'vehicle_id' => 'required|exists:vehicles,id',
-            'user_id' => 'required|exists:users,id',
-            'evidence_photo' => 'nullable|image|max:2048',
-        ]);
-    
-        if ($request->hasFile('evidence_photo')) {
-            $path = $request->file('evidence_photo')->store('evidence_photos', 'public');
-            $validated['evidence_photo'] = $path;
-        }
-    
-        $maintenance = Maintenance::create($validated);
-        Vehicle::find($validated['vehicle_id'])->update(['status' => 'maintenance']);
-    
-        return response()->json($maintenance, 201);
+{
+    $validated = $request->validate([
+        'vehicle_id' => 'required|exists:vehicles,id',
+        'user_id' => 'required|exists:users,id',
+        'tipe_maintenance' => 'required|string|max:255',
+        'note' => 'nullable|string',
+        'date' => 'required|date',
+        'evidence_photo' => 'nullable|image|max:2048',
+    ]);
+
+    if ($request->hasFile('evidence_photo')) {
+        $path = $request->file('evidence_photo')->store('evidence_photos', 'public');
+        $validated['evidence_photo'] = $path;
     }
+
+    $maintenance = Maintenance::create($validated);
+    Vehicle::find($validated['vehicle_id'])->update(['status' => 'maintenance']);
+
+    return response()->json($maintenance, 201);
+}
+
 
     
     public function update(Request $request, $id)
